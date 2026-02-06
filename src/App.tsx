@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
+  const [loadingTodos, setLoadingTodos] = useState<number | null>(null);
   const [footerFilter, setFooterFilter] = useState<string>('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteAllCompletedTodos = () => {
-    setLoadingTodos(true);
+    setLoadingTodos(-1);
 
     try {
       const newTodos = todos.filter(todo => {
@@ -99,7 +99,7 @@ export const App: React.FC = () => {
     } catch (error) {
       setErrorMessage('Unable to delete a todo');
     } finally {
-      setLoadingTodos(false);
+      setLoadingTodos(null);
     }
   };
 

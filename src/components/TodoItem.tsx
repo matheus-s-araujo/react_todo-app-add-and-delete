@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 type TodoItemProps = {
   todo: Todo;
-  loadingTodos: boolean;
+  loadingTodos: number | null;
   handleCheckTodo: (id: number) => void;
   onSave: (
     todoEdited: Todo,
@@ -59,7 +59,7 @@ export function TodoItem({
         <div
           data-cy="TodoLoader"
           className={classNames('modal', 'overlay', {
-            'is-active': loadingTodos,
+            'is-active': loadingTodos === todo.id || loadingTodos === -1,
           })}
         >
           <div className="modal-background has-background-white-ter" />
@@ -102,7 +102,7 @@ export function TodoItem({
         <div
           data-cy="TodoLoader"
           className={classNames('modal', 'overlay', {
-            'is-active': loadingTodos,
+            'is-active': loadingTodos === todo.id || loadingTodos === -1,
           })}
         >
           <div className="modal-background has-background-white-ter" />

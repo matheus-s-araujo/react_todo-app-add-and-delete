@@ -7,8 +7,8 @@ type TodoInputProps = {
   todos: Todo[];
   completedTodos: Todo[];
   handleErrorMessage: (errorMessage: string) => void;
-  loadingTodos: boolean;
-  setLoadingTodos: (loading: boolean) => void;
+  loadingTodos: number | null;
+  setLoadingTodos: (id: number | null) => void;
   handleTodoAdded: (todo: Todo) => void;
   handleCheckAllTodos: () => void;
   setTempTodo: (temp: Todo | null) => void;
@@ -40,16 +40,15 @@ export function TodoInput({
     }
 
     if (query) {
-      setLoadingTodos(true);
+      setLoadingTodos(0);
 
       const newTodo = {
-        id: 0,
         userId: USER_ID,
         title: query.trim(),
         completed: false,
       };
 
-      setTempTodo(newTodo);
+      setTempTodo({ ...newTodo, id: 0 });
 
       try {
         const todo = await postTodos(newTodo);
@@ -61,7 +60,7 @@ export function TodoInput({
         handleErrorMessage('Unable to add a todo');
         setTempTodo(null);
       } finally {
-        setLoadingTodos(false);
+        setLoadingTodos(null);
       }
     }
   };
@@ -90,7 +89,7 @@ export function TodoInput({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={query}
-          disabled={loadingTodos ? true : false}
+          disabled={loadingTodos !== null}
           autoFocus
           onChange={event => handleFormChanges(event)}
         />

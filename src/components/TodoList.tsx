@@ -7,8 +7,8 @@ import { TodoItem } from './TodoItem';
 type TodoListProps = {
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
-  loadingTodos: boolean;
-  setLoadingTodos: (loading: boolean) => void;
+  loadingTodos: number | null;
+  setLoadingTodos: (id: number | null) => void;
   handleErrorMessage: (errorMessage: string) => void;
   handleCheckTodo: (id: number) => void;
   tempTodo: Todo | null;
@@ -31,7 +31,7 @@ export function TodoList({
   ) => {
     event.preventDefault();
 
-    setLoadingTodos(true);
+    setLoadingTodos(newTodo.id);
 
     try {
       await patchTodos(newTodo);
@@ -48,14 +48,14 @@ export function TodoList({
     } catch (error) {
       handleErrorMessage('Unable to update a todo');
     } finally {
-      setLoadingTodos(false);
+      setLoadingTodos(null);
       setEditingTodo(null);
     }
   };
 
   const handleDeleteTodo = async (id: number) => {
     if (todos.find(t => t.id === id)) {
-      setLoadingTodos(true);
+      setLoadingTodos(id);
 
       try {
         await deleteTodos(id);
@@ -65,7 +65,7 @@ export function TodoList({
       } catch (error) {
         handleErrorMessage('Unable to delete a todo');
       } finally {
-        setLoadingTodos(false);
+        setLoadingTodos(null);
       }
     }
   };
