@@ -85,26 +85,24 @@ export const App: React.FC = () => {
   const handleDeleteAllCompletedTodos = () => {
     setLoadingTodos(-1);
 
-    try {
-      const newTodos = todos.filter(todo => {
-        if (todo.completed) {
-          deleteTodos(todo.id);
-
-          return false;
-        } else {
-          return true;
-        }
+    Promise.all(
+      todos
+        .filter(todo => todo.completed)
+        .map(todo =>
+          deleteTodos(todo.id)
+            .then(() => todo.id)
+            .catch(() => setErrorMessage('Unable to delete a todo')),
+        ),
+    )
+      .then(todosIdList => {
+        setTodos(tds => tds.filter(t => !todosIdList.includes(t.id)));
+      })
+      .finally(() => {
+        setLoadingTodos(null);
+        setTimeout(() => {
+          submmitInputRef.current?.focus();
+        }, 0);
       });
-
-      setTodos(newTodos);
-    } catch (error) {
-      setErrorMessage('Unable to delete a todo');
-    } finally {
-      setLoadingTodos(null);
-      setTimeout(() => {
-        submmitInputRef.current?.focus();
-      }, 0);
-    }
   };
 
   if (!USER_ID) {
