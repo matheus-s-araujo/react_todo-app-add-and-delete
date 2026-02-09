@@ -12,6 +12,7 @@ type TodoInputProps = {
   handleTodoAdded: (todo: Todo) => void;
   handleCheckAllTodos: () => void;
   setTempTodo: (temp: Todo | null) => void;
+  submmitInputRef: React.RefObject<HTMLInputElement>;
 };
 
 export function TodoInput({
@@ -23,6 +24,7 @@ export function TodoInput({
   handleTodoAdded,
   handleCheckAllTodos,
   setTempTodo,
+  submmitInputRef,
 }: TodoInputProps) {
   const [query, setQuery] = useState<string>('');
 
@@ -61,6 +63,10 @@ export function TodoInput({
         setTempTodo(null);
       } finally {
         setLoadingTodos(null);
+        // Defer focus to ensure it happens after DOM updates
+        setTimeout(() => {
+          submmitInputRef.current?.focus();
+        }, 0);
       }
     }
   };
@@ -92,6 +98,7 @@ export function TodoInput({
           disabled={loadingTodos !== null}
           autoFocus
           onChange={event => handleFormChanges(event)}
+          ref={submmitInputRef}
         />
       </form>
     </header>

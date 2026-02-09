@@ -470,10 +470,10 @@ describe('', () => {
         page.newTodoField().type('Test Todo{enter}');
       });
 
-      // it('should send a create request', () => {
-      //   cy.tick(1000);
-      //   cy.get('@createCallback').should('have.callCount', 1);
-      // });
+      it('should send a create request', () => {
+        cy.tick(1000);
+        cy.get('@createCallback').should('have.callCount', 1);
+      });
 
       it('should disable the input', () => {
         page.newTodoField().should('be.disabled');

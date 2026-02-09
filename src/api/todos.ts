@@ -10,7 +10,7 @@ export const getTodos = () => {
 export type NewTodo = Omit<Todo, 'id'>;
 
 export const postTodos = (newTodo: NewTodo) => {
-  return client.post<Todo>(`/todos?userId=${USER_ID}`, newTodo);
+  return client.post<Todo>(`/todos`, newTodo);
 };
 
 export const deleteTodos = (todoId: number) => {

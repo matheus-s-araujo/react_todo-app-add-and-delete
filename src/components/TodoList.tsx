@@ -12,6 +12,7 @@ type TodoListProps = {
   handleErrorMessage: (errorMessage: string) => void;
   handleCheckTodo: (id: number) => void;
   tempTodo: Todo | null;
+  submmitInputRef: React.RefObject<HTMLInputElement>;
 };
 
 export function TodoList({
@@ -22,6 +23,7 @@ export function TodoList({
   handleErrorMessage,
   handleCheckTodo,
   tempTodo,
+  submmitInputRef,
 }: TodoListProps) {
   const [editingTodo, setEditingTodo] = useState<number | null>(null);
 
@@ -50,6 +52,9 @@ export function TodoList({
     } finally {
       setLoadingTodos(null);
       setEditingTodo(null);
+      setTimeout(() => {
+        submmitInputRef.current?.focus();
+      }, 0);
     }
   };
 
@@ -66,6 +71,9 @@ export function TodoList({
         handleErrorMessage('Unable to delete a todo');
       } finally {
         setLoadingTodos(null);
+        setTimeout(() => {
+          submmitInputRef.current?.focus();
+        }, 0);
       }
     }
   };

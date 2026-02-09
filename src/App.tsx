@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { deleteTodos, getTodos, USER_ID } from './api/todos';
 import { TodoList } from './components/TodoList';
@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState<number | null>(null);
   const [footerFilter, setFooterFilter] = useState<string>('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const submmitInputRef = useRef<HTMLInputElement>(null);
 
   const filteredTodos = useMemo(() => {
     if (footerFilter === 'all') {
@@ -100,6 +101,9 @@ export const App: React.FC = () => {
       setErrorMessage('Unable to delete a todo');
     } finally {
       setLoadingTodos(null);
+      setTimeout(() => {
+        submmitInputRef.current?.focus();
+      }, 0);
     }
   };
 
@@ -121,6 +125,7 @@ export const App: React.FC = () => {
           handleTodoAdded={handleTodoAdded}
           handleCheckAllTodos={handleCheckAllTodos}
           setTempTodo={setTempTodo}
+          submmitInputRef={submmitInputRef}
         />
 
         <TodoList
@@ -131,6 +136,7 @@ export const App: React.FC = () => {
           handleErrorMessage={handleErrorMessage}
           handleCheckTodo={handleCheckTodo}
           tempTodo={tempTodo}
+          submmitInputRef={submmitInputRef}
         />
 
         {todos.length > 0 && (
